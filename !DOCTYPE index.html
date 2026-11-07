@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>伴心守 雙效智慧追蹤器 | 尋寶小日子團隊</title>
+    <style>
+        :root {
+            --primary: #1E3A8A;
+            --secondary: #E07A5F;
+            --accent: #10B981;
+            --bg-light: #F8FAFC;
+            --text-dark: #1E293B;
+            --card-border: #E2E8F0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif; }
+        body { background-color: var(--bg-light); color: var(--text-dark); line-height: 1.6; }
+
+        /* 頂部公告 */
+        .top-banner { background-color: var(--secondary); color: white; text-align: center; padding: 0.5rem; font-size: 0.9rem; font-weight: bold; }
+        .timer { background: rgba(0,0,0,0.2); padding: 0.2rem 0.6rem; border-radius: 4px; margin-left: 0.5rem; }
+
+        /* 導覽列與 LOGO */
+        header { background-color: white; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 99; }
+        .nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 2rem; }
+        
+        .logo-box { display: flex; align-items: center; gap: 1rem; text-decoration: none; }
+        .logo-img { height: 50px; width: 50px; object-fit: cover; border-radius: 50%; border: 2px solid var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .logo-text-title { font-size: 1.3rem; font-weight: bold; color: var(--primary); line-height: 1.2; }
+        .logo-text-sub { font-size: 0.85rem; color: var(--secondary); font-weight: bold; letter-spacing: 1px; margin-top: 2px; }
+
+        /* 主視覺 Banner */
+        .hero { background: linear-gradient(135deg, #EFF6FF 0%, #FEF3C7 100%); padding: 2.5rem 1.5rem; text-align: center; }
+        .hero h1 { font-size: 2rem; color: var(--primary); margin-bottom: 0.5rem; }
+        .tag-badge { background-color: white; color: var(--primary); padding: 0.3rem 1rem; border-radius: 15px; font-size: 0.85rem; font-weight: bold; display: inline-block; margin-bottom: 0.8rem; border: 1px solid #BFDBFE; }
+
+        /* 商品購物區 */
+        .store-container { max-width: 1150px; margin: 2rem auto; padding: 0 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+        @media (max-width: 850px) { .store-container { grid-template-columns: 1fr; } }
+
+        /* 左側產品展示 */
+        .product-gallery { background: white; padding: 1.5rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); text-align: center; height: fit-content; }
+        .main-img-box { width: 100%; height: 380px; border-radius: 12px; overflow: hidden; background-color: #F1F5F9; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; border: 1px solid var(--card-border); position: relative; }
+        .main-img-box img { width: 100%; height: 100%; object-fit: contain; transition: 0.3s; background: #FFF; }
+        .img-tag { position: absolute; top: 12px; left: 12px; background: rgba(30, 58, 138, 0.85); color: white; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.81rem; }
+        
+        .thumb-list { display: flex; gap: 0.6rem; justify-content: center; flex-wrap: wrap; }
+        .thumb-item { width: 65px; height: 65px; border-radius: 8px; border: 2px solid transparent; cursor: pointer; overflow: hidden; background: #FFF; border: 1px solid var(--card-border); transition: 0.2s; }
+        .thumb-item.active { border-color: var(--primary); border-width: 2px; transform: scale(1.05); }
+        .thumb-item img { width: 100%; height: 100%; object-fit: contain; }
+
+        /* 右側選項區 */
+        .product-options { background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+        .section-title { font-size: 1.1rem; font-weight: bold; margin: 1.2rem 0 0.6rem 0; color: var(--primary); display: flex; align-items: center; justify-content: space-between; }
+
+        .radio-card { border: 2px solid var(--card-border); border-radius: 10px; padding: 0.8rem 1rem; margin-bottom: 0.6rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: 0.2s; }
+        .radio-card:hover, .radio-card.active { border-color: var(--primary); background-color: #F0F7FF; }
+        .badge-discount { background: #FEE2E2; color: #DC2626; font-size: 0.8rem; padding: 0.2rem 0.6rem; border-radius: 4px; font-weight: bold; }
+
+        /* 顏色選擇按鈕區 */
+        .color-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.5rem; margin-bottom: 1rem; }
+        .color-btn { border: 2px solid var(--card-border); border-radius: 8px; padding: 0.4rem 0.2rem; text-align: center; cursor: pointer; background: white; font-size: 0.78rem; transition: 0.2s; }
+        .color-btn:hover, .color-btn.active { border-color: var(--primary); background-color: #EFF6FF; font-weight: bold; }
+        .color-btn img { width: 42px; height: 42px; object-fit: contain; display: block; margin: 0 auto 4px auto; border-radius: 4px; }
+
+        .price-box { background: #F8FAFC; padding: 1.2rem; border-radius: 10px; margin-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--card-border); }
+        .price-amount { font-size: 1.8rem; font-weight: bold; color: var(--secondary); }
+        .price-strike { font-size: 0.9rem; color: #94A3B8; text-decoration: line-through; margin-right: 0.4rem; }
+
+        .btn-action { width: 100%; padding: 1rem; font-size: 1.1rem; border-radius: 10px; font-weight: bold; border: none; cursor: pointer; transition: 0.2s; margin-top: 1rem; background-color: var(--secondary); color: white; }
+        .btn-action:hover { opacity: 0.9; transform: translateY(-2px); }
+
+        /* 側滑購物車 */
+        .cart-drawer { position: fixed; top: 0; right: -420px; width: 380px; height: 100%; background: white; box-shadow: -5px 0 25px rgba(0,0,0,0.15); z-index: 1000; transition: 0.3s; padding: 1.5rem; display: flex; flex-direction: column; }
+        .cart-drawer.open { right: 0; }
+        .cart-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--card-border); padding-bottom: 1rem; }
+        .cart-body { flex: 1; padding: 1rem 0; overflow-y: auto; }
+        .coupon-input { display: flex; gap: 0.5rem; margin-top: 1rem; }
+        .coupon-input input { flex: 1; padding: 0.5rem; border: 1px solid var(--card-border); border-radius: 6px; }
+
+        /* 結帳 Modal 彈窗樣式 */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: none; justify-content: center; align-items: center;
+            z-index: 2000; padding: 1rem;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-card {
+            background: white; width: 100%; max-width: 520px; max-height: 90vh;
+            border-radius: 16px; overflow-y: auto; padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2); position: relative;
+        }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; border-bottom: 1px solid var(--card-border); padding-bottom: 0.8rem; }
+        .form-group { margin-bottom: 1rem; text-align: left; }
+        .form-group label { display: block; font-size: 0.88rem; font-weight: bold; margin-bottom: 0.4rem; color: var(--primary); }
+        .form-group input, .form-group select {
+            width: 100%; padding: 0.75rem; border: 1px solid var(--card-border); border-radius: 8px; font-size: 0.95rem; outline: none;
+        }
+        .form-group input:focus, .form-group select:focus { border-color: var(--primary); }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+
+        /* 感謝頁面專用樣式 */
+        .thank-you-box { text-align: center; padding: 1rem 0; }
+        .success-icon { font-size: 3.5rem; color: var(--accent); margin-bottom: 0.5rem; }
+        .order-info-card { background: #F8FAFC; border: 1px dashed var(--card-border); border-radius: 10px; padding: 1rem; margin: 1.2rem 0; text-align: left; font-size: 0.88rem; }
+
+        /* 頁尾 */
+        .site-footer { background-color: #0A192F; color: #94A3B8; padding-top: 3rem; font-size: 0.88rem; margin-top: 4rem; }
+        .footer-container { max-width: 1200px; margin: 0 auto; padding: 0 2rem 2rem 2rem; display: grid; grid-template-columns: 2.5fr 1fr 1fr 1fr; gap: 2rem; }
+        @media (max-width: 900px) { .footer-container { grid-template-columns: 1fr 1fr; } }
+        .footer-title { color: #FFFFFF; font-size: 0.95rem; font-weight: bold; margin-bottom: 1rem; }
+        .footer-links { list-style: none; }
+        .footer-links li { margin-bottom: 0.5rem; }
+        .footer-links a { color: #94A3B8; text-decoration: none; }
+        .footer-links a:hover { color: #38BDF8; }
+        .footer-bottom { background-color: #020817; padding: 1rem 0; border-top: 1px solid #1E293B; }
+        .footer-bottom-container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+
+    <!-- 頂部公告 -->
+    <div class="top-banner">
+        🔥 全國大專企劃預購優惠：輸入折扣碼「BANSIN100」再折 $100！限時優惠倒數：
+        <span class="timer" id="countdown">23:59:59</span>
+    </div>
+
+    <!-- 導覽列 -->
+    <header>
+        <div class="nav-container">
+            <a href="#" class="logo-box">
+                <img src="LOGO.jpg" alt="尋寶小日子 LOGO" class="logo-img" onerror="this.src='https://via.placeholder.com/50?text=LOGO'">
+                <div>
+                    <div class="logo-text-title">伴心守 雙效智慧追蹤器</div>
+                    <div class="logo-text-sub">尋寶小日子 團隊出品</div>
+                </div>
+            </a>
+            <button class="btn-action" style="width:auto; padding: 0.5rem 1.2rem; margin:0; font-size:0.95rem;" onclick="toggleCart()">🛒 購物車 (<span id="cart-count">0</span>)</button>
+        </div>
+    </header>
+
+    <!-- 主視覺 Banner -->
+    <section class="hero">
+        <span class="tag-badge">致理科技大學 行銷與流通管理實務專題成果</span>
+        <h1>時尚頸鏈 × 毛小孩項圈夾掛式智慧追蹤器</h1>
+        <p>【尋寶小日子】一機雙用模組化設計！長者優雅去標籤化頸鏈，毛小孩輕鬆免換項圈快速升級！</p>
+    </section>
+
+    <!-- 購物主要區域 -->
+    <main class="store-container">
+        
+        <!-- 左側：圖片預覽展示區 -->
+        <div class="product-gallery">
+            <div class="main-img-box">
+                <span class="img-tag" id="img-tag-text">方案對應：【單入個人守護組】細節規格</span>
+                <img id="main-product-img" src="product2_3.png" alt="伴心守追蹤器">
+            </div>
+            
+            <p style="font-size:0.85rem; color:#64748B; margin-bottom:0.8rem;">👇 點擊下方縮圖切換功能情境或五大特色配色</p>
+            <div class="thumb-list">
+                <!-- 方案對應情境圖 -->
+                <div class="thumb-item active" onclick="switchImage('product2_3.png', '單入組：晶片與磁吸扣細節規格', this)">
+                    <img src="product2_3.png" title="單入個人守護組細節">
+                </div>
+                <div class="thumb-item" onclick="switchImage('product4_2.png', '雙重安心家庭包：雙效情境圖', this)">
+                    <img src="product4_2.png" title="雙重安心家庭包">
+                </div>
+                <div class="thumb-item" onclick="switchImage('product1_2.png', '全家守護極致包：長者時尚頸鏈款', this)">
+                    <img src="product1_2.png" title="極致包 (長者頸鏈情境)">
+                </div>
+                <div class="thumb-item" onclick="switchImage('product3_2.png', '全家守護極致包：狗狗項圈夾掛款', this)">
+                    <img src="product3_2.png" title="極致包 (寵物夾具情境)">
+                </div>
+                <!-- 五款顏色獨立PNG圖片 -->
+                <div class="thumb-item" onclick="switchImage('product5_4.png', '配色：星空黑 (Starlight Black)', this)">
+                    <img src="product5_4.png" title="星空黑">
+                </div>
+                <div class="thumb-item" onclick="switchImage('product6_4.png', '配色：森林綠 (Forest Green)', this)">
+                    <img src="product6_4.png" title="森林綠">
+                </div>
+                <div class="thumb-item" onclick="switchImage('product7_4.png', '配色：玫瑰粉 (Rose Pink)', this)">
+                    <img src="product7_4.png" title="玫瑰粉">
+                </div>
+                <div class="thumb-item" onclick="switchImage('product8_4.png', '配色：暮光銀 (Twilight Silver)', this)">
+                    <img src="product8_4.png" title="暮光銀">
+                </div>
+                <div class="thumb-item" onclick="switchImage('product9_4.png', '配色：經典香檳金 (Champagne Gold)', this)">
+                    <img src="product9_4.png" title="經典香檳金">
+                </div>
+            </div>
+        </div>
+
+        <!-- 右側：方案與規格選購區 -->
+        <div class="product-options">
+            
+            <!-- 步驟 1：組合方案 -->
+            <div class="section-title">
+                <span>1. 選擇組合方案</span>
+                <small style="font-size:0.75rem; color:#64748B; font-weight:normal;">每組均含首年免費全功能訂閱</small>
+            </div>
+            
+            <label class="radio-card active">
+                <div>
+                    <input type="radio" name="bundle" value="990" checked onclick="selectBundle(990, 'product2_3.png', '單入組：晶片與磁吸扣細節規格')">
+                    <strong>【單入個人守護組】</strong>
+                    <div style="font-size:0.8rem; color:#64748B;">追蹤器主機x1 + 親膚時尚頸鏈或夾具配件</div>
+                </div>
+                <span class="badge-discount">NT$ 990</span>
+            </label>
+
+            <label class="radio-card">
+                <div>
+                    <input type="radio" name="bundle" value="1880" onclick="selectBundle(1880, 'product4_2.png', '雙重安心家庭包：雙效情境圖')">
+                    <strong>【雙重安心家庭包】（熱銷推薦）</strong>
+                    <div style="font-size:0.8rem; color:#64748B;">追蹤器主機x2 + 時尚頸鏈x1 + 寵物夾具x1</div>
+                </div>
+                <span class="badge-discount">NT$ 1,880</span>
+            </label>
+
+            <label class="radio-card">
+                <div>
+                    <input type="radio" name="bundle" value="2680" onclick="selectBundle(2680, 'product1_2.png', '全家守護極致包：長者與寵物雙載具組')">
+                    <strong>【全家守護極致包】</strong>
+                    <div style="font-size:0.8rem; color:#64748B;">追蹤器主機x3 + 完整載具配件組</div>
+                </div>
+                <span class="badge-discount">NT$ 2,680</span>
+            </label>
+
+            <!-- 步驟 2：五大獨立配色選取 -->
+            <div class="section-title">2. 選擇產品配色 (五色獨立展示圖)</div>
+            <div class="color-grid">
+                <div class="color-btn active" onclick="selectColor('星空黑', 'product5_4.png', this)">
+                    <img src="product5_4.png" alt="星空黑">
+                    星空黑
+                </div>
+                <div class="color-btn" onclick="selectColor('森林綠', 'product6_4.png', this)">
+                    <img src="product6_4.png" alt="森林綠">
+                    森林綠
+                </div>
+                <div class="color-btn" onclick="selectColor('玫瑰粉', 'product7_4.png', this)">
+                    <img src="product7_4.png" alt="玫瑰粉">
+                    玫瑰粉
+                </div>
+                <div class="color-btn" onclick="selectColor('暮光銀', 'product8_4.png', this)">
+                    <img src="product8_4.png" alt="暮光銀">
+                    暮光銀
+                </div>
+                <div class="color-btn" onclick="selectColor('經典香檳金', 'product9_4.png', this)">
+                    <img src="product9_4.png" alt="經典香檳金">
+                    香檳金
+                </div>
+            </div>
+
+            <!-- 步驟 3：SaaS 加值訂閱方案 -->
+            <div class="section-title">
+                <span>3. 次年安心守護 SaaS 續訂服務</span>
+            </div>
+            
+            <label class="radio-card active">
+                <div>
+                    <input type="radio" name="saas" value="180" checked onclick="updateTotal()">
+                    <strong>【推薦續訂】全功能高精度定位服務</strong><br>
+                    <small style="color:#64748B">GPS/Wi-Fi 精準定位 + 電子圍欄 + 30天軌跡歷程</small>
+                </div>
+                <strong style="color:var(--secondary)">NT$ 180 / 年</strong>
+            </label>
+            
+            <label class="radio-card">
+                <div>
+                    <input type="radio" name="saas" value="0" onclick="updateTotal()">
+                    <strong>【基本免費版】藍牙近距離尋找</strong><br>
+                    <small style="color:#64748B">僅提供近距離藍牙雷達尋找</small>
+                </div>
+                <span>NT$ 0 / 年</span>
+            </label>
+
+            <!-- 價格計算區塊 -->
+            <div class="price-box">
+                <div>
+                    <span style="font-size:0.85rem; color:#64748B;">預購試算總價 (首年)：</span><br>
+                    <span class="price-strike" id="strike-price">NT$ 1,280</span>
+                </div>
+                <div class="price-amount" id="total-price">NT$ 990</div>
+            </div>
+
+            <button class="btn-action" onclick="addToCart()">加入購物車並預購</button>
+        </div>
+    </main>
+
+    <!-- 側滑購物車 Drawer -->
+    <div class="cart-drawer" id="cartDrawer">
+        <div class="cart-header">
+            <h3>🛒 您的預購清單</h3>
+            <button onclick="toggleCart()" style="border:none; background:none; font-size:1.3rem; cursor:pointer;">✕</button>
+        </div>
+        <div class="cart-body" id="cartItemDetails">
+            <p style="color:#94A3B8; text-align:center; margin-top:2rem;">購物車目前是空的</p>
+        </div>
+        <div class="coupon-input">
+            <input type="text" id="couponCode" placeholder="折扣碼 BANSIN100">
+            <button class="btn-action" style="margin:0; width:auto; padding:0.5rem 1rem;" onclick="applyDiscount()">折抵</button>
+        </div>
+        <button class="btn-action" style="margin-top:1rem;" onclick="checkoutAlert()">進行結帳</button>
+    </div>
+
+    <!-- 步驟 1：填寫結帳資料彈窗 -->
+    <div class="modal-overlay" id="checkoutModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 style="color:var(--primary);">📋 填寫預購訂購資料</h3>
+                <button onclick="closeCheckoutModal()" style="border:none; background:none; font-size:1.3rem; cursor:pointer;">✕</button>
+            </div>
+            <form id="checkoutForm" onsubmit="handleFormSubmit(event)">
+                <div class="form-group">
+                    <label>訂購人姓名 *</label>
+                    <input type="text" id="custName" placeholder="請輸入姓名" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>聯絡電話 *</label>
+                        <input type="tel" id="custPhone" placeholder="0912345678" required>
+                    </div>
+                    <div class="form-group">
+                        <label>電子信箱 *</label>
+                        <input type="email" id="custEmail" placeholder="example@mail.com" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>配送方式 *</label>
+                    <select id="shippingMethod" required>
+                        <option value="宅配到府">🚚 宅配到府（免運費）</option>
+                        <option value="超商取貨">🏪 7-11 / 全家 超商取貨付款</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>收件地址 / 門市名稱 *</label>
+                    <input type="text" id="custAddress" placeholder="請輸入完整收件地址或超商門市" required>
+                </div>
+                <div class="form-group">
+                    <label>付款方式 *</label>
+                    <select id="paymentMethod" required>
+                        <option value="信用卡線上刷卡">💳 信用卡 / LINE Pay 線上一次付清</option>
+                        <option value="貨到付款">💵 貨到付款 / 超商取貨付款</option>
+                        <option value="ATM轉帳">🏦 ATM 虛擬帳號匯款</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn-action">確認提交並完成預購</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 步驟 2：感謝訂購完成彈窗 -->
+    <div class="modal-overlay" id="thankYouModal">
+        <div class="modal-card">
+            <div class="thank-you-box">
+                <div class="success-icon">🎉</div>
+                <h2 style="color:var(--primary); margin-bottom:0.4rem;">感謝您的預購與支持！</h2>
+                <p style="font-size:0.9rem; color:#64748B;">【尋寶小日子】團隊已收到您的預購訂單</p>
+                
+                <div class="order-info-card">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:0.4rem;">
+                        <strong>訂單編號：</strong>
+                        <span id="resOrderNo" style="color:var(--secondary); font-weight:bold;">BS-20260999</span>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; margin-bottom:0.4rem;">
+                        <strong>訂購人：</strong>
+                        <span id="resName">--</span>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; margin-bottom:0.4rem;">
+                        <strong>付款與配送：</strong>
+                        <span id="resPayShip">--</span>
+                    </div>
+                    <div id="resCartDetail" style="margin-top:0.6rem; border-top:1px solid #E2E8F0; padding-top:0.6rem;">
+                        <!-- 動態渲染購物內容 -->
+                    </div>
+                </div>
+
+                <div style="background:#EFF6FF; padding:0.8rem; border-radius:8px; font-size:0.83rem; color:#1E40AF; text-align:left; margin-bottom:1.2rem;">
+                    💌 <strong>團隊小提醒：</strong><br>
+                    本頁面為【致理科技大學 行銷與流通管理系】實務專題模擬展示。感謝您體驗「伴心守」防走失智慧追蹤器的預購流程！
+                </div>
+
+                <button class="btn-action" onclick="closeThankYouModal()">完成並返回主頁</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 頁尾 -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-col">
+                <div style="font-size:1.2rem; font-weight:bold; color:white; margin-bottom:0.8rem;">🛡️ 伴心守 BANSIN</div>
+                <p style="font-size:0.85rem; color:#CBD5E1; margin-bottom:0.8rem;">【尋寶小日子】團隊設計研發。時尚頸鏈與毛小孩夾掛式雙用微型定位器，讓關心不再是負擔。</p>
+            </div>
+            <div class="footer-col">
+                <h4 class="footer-title">關於專題</h4>
+                <ul class="footer-links">
+                    <li><a href="#">尋寶小日子團隊</a></li>
+                    <li><a href="#">致理科技大學</a></li>
+                    <li><a href="#">行銷與流通管理系</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4 class="footer-title">產品特色</h4>
+                <ul class="footer-links">
+                    <li><a href="#">微型晶片技術</a></li>
+                    <li><a href="#">IP67 防水防塵</a></li>
+                    <li><a href="#">去標籤化美學</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4 class="footer-title">加值服務</h4>
+                <ul class="footer-links">
+                    <li><a href="#">GPS/Wi-Fi 定位</a></li>
+                    <li><a href="#">電子圍欄警示</a></li>
+                    <li><a href="#">次年 NT$180 續訂</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-bottom-container">
+                <p>© 2026 伴心守 智慧追蹤器 | 尋寶小日子團隊 版權所有 (致理科技大學)</p>
+                <div>專題發表與成果展示專用頁面</div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 互動 JS 腳本 -->
+    <script>
+        let selectedColorName = '星空黑';
+        let discount = 0;
+
+        // 切換主顯示圖片
+        function switchImage(src, text, el) {
+            document.getElementById('main-product-img').src = src;
+            document.getElementById('img-tag-text').innerText = text;
+            
+            document.querySelectorAll('.thumb-item').forEach(item => item.classList.remove('active'));
+            if(el) el.classList.add('active');
+        }
+
+        // 選擇組合方案
+        function selectBundle(price, imgSrc, tagText) {
+            switchImage(imgSrc, tagText, document.querySelector(`.thumb-item img[src="${imgSrc}"]`)?.parentElement);
+            updateTotal();
+        }
+
+        // 選擇五大配色
+        function selectColor(colorName, imgSrc, el) {
+            selectedColorName = colorName;
+            document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+            if(el) el.classList.add('active');
+            
+            switchImage(imgSrc, `配色：${colorName}`);
+            
+            document.querySelectorAll('.thumb-item').forEach(item => {
+                if(item.querySelector('img').src.includes(imgSrc)) {
+                    item.classList.add('active');
+                }
+            });
+        }
+
+        // 計算並更新總金額
+        function updateTotal() {
+            const bundlePrice = parseInt(document.querySelector('input[name="bundle"]:checked').value);
+            
+            document.querySelectorAll('input[name="bundle"]').forEach(i => i.closest('.radio-card').classList.toggle('active', i.checked));
+            document.querySelectorAll('input[name="saas"]').forEach(i => i.closest('.radio-card').classList.toggle('active', i.checked));
+
+            const total = bundlePrice - discount;
+            const original = bundlePrice + 290;
+
+            document.getElementById('total-price').innerText = `NT$ ${total.toLocaleString()}`;
+            document.getElementById('strike-price').innerText = `NT$ ${original.toLocaleString()}`;
+        }
+
+        // 側滑購物車控制
+        function toggleCart() {
+            document.getElementById('cartDrawer').classList.toggle('open');
+        }
+
+        // 加入購物車
+        function addToCart() {
+            const bundleText = document.querySelector('input[name="bundle"]:checked').closest('.radio-card').querySelector('strong').innerText;
+            const saasText = document.querySelector('input[name="saas"]:checked').closest('.radio-card').querySelector('strong').innerText;
+            const currentTotal = document.getElementById('total-price').innerText;
+
+            document.getElementById('cartItemDetails').innerHTML = `
+                <div style="padding:1rem; background:#F8FAFC; border-radius:10px; border:1px solid #E2E8F0;">
+                    <strong style="color:var(--primary); font-size:1rem;">${bundleText}</strong>
+                    <div style="font-size:0.85rem; color:#475569; margin-top:0.4rem;">· 選擇款式配色：<span style="color:var(--secondary); font-weight:bold;">${selectedColorName}</span></div>
+                    <div style="font-size:0.85rem; color:#475569;">· SaaS 次年續訂：${saasText}</div>
+                    <div style="font-size:0.75rem; color:#10B981; margin-top:0.2rem;">✓ 含首年免費全功能定位服務</div>
+                    <hr style="margin:0.6rem 0; border:none; border-top:1px dashed #CBD5E1;">
+                    <div style="text-align:right; font-size:1.1rem; font-weight:bold; color:var(--secondary);">${currentTotal}</div>
+                </div>
+            `;
+            document.getElementById('cart-count').innerText = "1";
+            toggleCart();
+        }
+
+        // 折扣碼套用
+        function applyDiscount() {
+            const code = document.getElementById('couponCode').value.trim();
+            if(code.toUpperCase() === 'BANSIN100') {
+                discount = 100;
+                alert('🎉 成功套用預購專屬折扣碼，現場折抵 NT$ 100！');
+                updateTotal();
+                addToCart();
+            } else {
+                alert('請輸入有效折扣碼 BANSIN100');
+            }
+        }
+
+        // 觸發開啟結帳資料 Modal
+        function checkoutAlert() {
+            const cartCount = parseInt(document.getElementById('cart-count').innerText);
+            if (cartCount === 0) {
+                alert('您的購物車目前是空的，請先選擇組合方案並加入購物車！');
+                return;
+            }
+            toggleCart();
+            document.getElementById('checkoutModal').classList.add('active');
+        }
+
+        // 關閉結帳 Modal
+        function closeCheckoutModal() {
+            document.getElementById('checkoutModal').classList.remove('active');
+        }
+
+        // 處理結帳表單送出事件
+        function handleFormSubmit(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('custName').value;
+            const payMethod = document.getElementById('paymentMethod').value;
+            const shipMethod = document.getElementById('shippingMethod').value;
+
+            const randomOrderNo = 'BS-' + new Date().getFullYear() + Math.floor(100000 + Math.random() * 900000);
+
+            document.getElementById('resOrderNo').innerText = randomOrderNo;
+            document.getElementById('resName').innerText = name;
+            document.getElementById('resPayShip').innerText = `${payMethod} / ${shipMethod}`;
+            document.getElementById('resCartDetail').innerHTML = document.getElementById('cartItemDetails').innerHTML;
+
+            closeCheckoutModal();
+            document.getElementById('thankYouModal').classList.add('active');
+        }
+
+        // 關閉感謝 Modal 並重設購物車
+        function closeThankYouModal() {
+            document.getElementById('thankYouModal').classList.remove('active');
+            document.getElementById('cartItemDetails').innerHTML = '<p style="color:#94A3B8; text-align:center; margin-top:2rem;">購物車目前是空的</p>';
+            document.getElementById('cart-count').innerText = "0";
+            discount = 0;
+            updateTotal();
+        }
+
+        // 倒數計時器
+        let time = 86399;
+        setInterval(() => {
+            let h = Math.floor(time / 3600);
+            let m = Math.floor((time % 3600) / 60);
+            let s = time % 60;
+            document.getElementById('countdown').innerText = 
+                `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+            if(time > 0) time--;
+        }, 1000);
+    </script>
+</body>
+</html>
