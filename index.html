@@ -203,29 +203,29 @@
             
             <label class="radio-card active">
                 <div>
-                    <input type="radio" name="bundle" value="2,680" checked onclick="selectBundle(2,680, 'product2_3.png', '單入組：晶片與磁吸扣細節規格')">
+                    <input type="radio" name="bundle" value="2680" checked onclick="selectBundle(2680, 'product2_3.png', '單入組：晶片與磁吸扣細節規格')">
                     <strong>【單入個人守護組】</strong>
-                    <div style="font-size:0.8rem; color:#64748B;">追蹤器主機x1 + 親膚時尚頸鏈或夾具配件</div>
+                    <div style="font-size:0.8rem; color:#64748B;">追蹤器主機x1 + 親膚時尚頸鏈或夾具配件 (單購原價)</div>
                 </div>
                 <span class="badge-discount">NT$ 2,680</span>
             </label>
 
             <label class="radio-card">
                 <div>
-                    <input type="radio" name="bundle" value="4,680" onclick="selectBundle(4,680, 'product4_2.png', '雙重安心家庭包：雙效情境圖')">
+                    <input type="radio" name="bundle" value="4680" onclick="selectBundle(4680, 'product4_2.png', '雙重安心家庭包：雙效情境圖')">
                     <strong>【雙重安心家庭包】（熱銷推薦）</strong>
-                    <div style="font-size:0.8rem; color:#64748B;">追蹤器主機x2 + 時尚頸鏈x1 + 寵物夾具x1</div>
+                    <div style="font-size:0.8rem; color:#64748B;">追蹤器主機x2 + 時尚頸鏈x1 + 寵物夾具x1 (原價$5,360)</div>
                 </div>
-                <span class="badge-discount">NT$ 4,680</span>
+                <span class="badge-discount">省 $680 | NT$ 4,680</span>
             </label>
 
             <label class="radio-card">
                 <div>
-                    <input type="radio" name="bundle" value="6,680" onclick="selectBundle(6,680, 'product1_2.png', '全家守護極致包：長者與寵物雙載具組')">
+                    <input type="radio" name="bundle" value="6680" onclick="selectBundle(6680, 'product1_2.png', '全家守護極致包：長者與寵物雙載具組')">
                     <strong>【全家守護極致包】</strong>
-                    <div style="font-size:0.8rem; color:#64748B;">追蹤器主機x3 + 完整載具配件組</div>
+                    <div style="font-size:0.8rem; color:#64748B;">追蹤器主機x3 + 完整載具配件組 (原價$8,040)</div>
                 </div>
-                <span class="badge-discount">NT$ 6,680</span>
+                <span class="badge-discount">省 $1,360 | NT$ 6,680</span>
             </label>
 
             <!-- 步驟 2：五大獨立配色選取 -->
@@ -255,14 +255,14 @@
 
             <!-- 步驟 3：SaaS 加值訂閱方案 -->
             <div class="section-title">
-                <span>3. 次月安心守護 SaaS 續訂服務</span>
+                <span>3. 安心守護 SaaS 訂閱服務</span>
             </div>
             
             <label class="radio-card active">
                 <div>
                     <input type="radio" name="saas" value="180" checked onclick="updateTotal()">
-                    <strong>【推薦續訂】全功能高精度定位服務</strong><br>
-                    <small style="color:#64748B">GPS/Wi-Fi 精準定位 + 電子圍欄 + 30天軌跡歷程</small>
+                    <strong>【推薦訂閱】全功能高精度定位服務</strong><br>
+                    <small style="color:#64748B">GPS/Wi-Fi 精準定位 + 電子圍欄 + 30天軌跡歷程 (首月免費)</small>
                 </div>
                 <strong style="color:var(--secondary)">NT$ 180 / 月</strong>
             </label>
@@ -279,8 +279,8 @@
             <!-- 價格計算區塊 -->
             <div class="price-box">
                 <div>
-                    <span style="font-size:0.85rem; color:#64748B;">預購試算總價 (首月)：</span><br>
-                    <span class="price-strike" id="strike-price">NT$ 4,680</span>
+                    <span style="font-size:0.85rem; color:#64748B;">預購試算總價：</span><br>
+                    <span class="price-strike" id="strike-price">NT$ 2,970</span>
                 </div>
                 <div class="price-amount" id="total-price">NT$ 2,680</div>
             </div>
@@ -416,7 +416,7 @@
                 <ul class="footer-links">
                     <li><a href="#">GPS/Wi-Fi 定位</a></li>
                     <li><a href="#">電子圍欄警示</a></li>
-                    <li><a href="#">次月 NT$180 續訂</a></li>
+                    <li><a href="#">每月 NT$180 續訂</a></li>
                 </ul>
             </div>
         </div>
@@ -492,7 +492,7 @@
                 <div style="padding:1rem; background:#F8FAFC; border-radius:10px; border:1px solid #E2E8F0;">
                     <strong style="color:var(--primary); font-size:1rem;">${bundleText}</strong>
                     <div style="font-size:0.85rem; color:#475569; margin-top:0.4rem;">· 選擇款式配色：<span style="color:var(--secondary); font-weight:bold;">${selectedColorName}</span></div>
-                    <div style="font-size:0.85rem; color:#475569;">· SaaS 次月續訂：${saasText}</div>
+                    <div style="font-size:0.85rem; color:#475569;">· SaaS 訂閱方案：${saasText}</div>
                     <div style="font-size:0.75rem; color:#10B981; margin-top:0.2rem;">✓ 含首月免費全功能定位服務</div>
                     <hr style="margin:0.6rem 0; border:none; border-top:1px dashed #CBD5E1;">
                     <div style="text-align:right; font-size:1.1rem; font-weight:bold; color:var(--secondary);">${currentTotal}</div>
